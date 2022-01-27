@@ -1,0 +1,87 @@
+---
+title: "Assignment3"
+author: "Zhijun Li"
+date: "26/01/2022"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Project Info
+
+### Github Username: zazauwu
+### Student Name: Zhijun Li
+### Student ID: 20136835
+### Github Link: https://github.com/zazauwu/assignment3.git
+
+## Load the data and required package
+```{r}
+library(dplyr)
+
+Data <- read.csv("./InputData/FallopiaData.csv")
+```
+
+## Check the data
+```{r}
+str(Data)
+```
+```{r}
+if (any(is.na(Data) == T)){
+  print("There is missing data")
+}else{
+  print("There is no missing data")}
+```
+
+## Data Modification
+```{r}
+Data <- Data %>% 
+  #remove rows with ‘Total’ biomass < 60
+  filter(Total >= 60) %>%
+  #select the columns in the order: ‘Total’, ‘Taxon’, ‘Senario’, ‘Nutrients’
+  select(Total, Taxon, Scenario, Nutrients) %>% 
+  #convert the ‘Total’ column from mg to grams and replace it with 'TotalG'
+  transmute(TotalG = Total/1000, Taxon, Scenario, Nutrients)
+
+head(Data)
+```
+
+## Custom Function
+```{r}
+#write a function that will take two inputs
+#'x' is any vector of Data to process
+myfun <- function(x, calculation, verbose = F){
+  #calculate the average value for the column named in 'x'
+  if (calculation == "Average"){
+    return(mean(x))
+    #calculate the sum of values for the column named in 'x'
+  } else if (calculation == "Sum"){
+    return(sum(x))
+    #count the number of observed values for the column named in 'x'
+  } else if (calculation == "Observations"){
+    return(length(x))
+    #otherwise output an error to the user
+  } else {
+    message("Error! Try 'Average', 'Sum', 'Observations' instead.")
+  }
+}
+```
+
+## Count the total number of observations in the 'Taxon' column
+```{r}
+myfun(Data$Taxon, "Observations") #should work
+```
+```{r}
+myfun(Data$Taxon, "Count") #should output error message
+```
+
+## Calculate the average TotalG for each of the two Nutrient concentrations
+```{r}
+Data %>%
+  group_by(Nutrients) %>%
+  summarise(Average_TotalG = myfun(TotalG, "Average"))
+```
+
+## Save the New Data
+```{r}
+write.csv(Data, "./Output/WrangledData.csv")
+```
