@@ -1,0 +1,52 @@
+---
+title: "Regex"
+author: "Zhijun Li"
+date: "02/02/2022"
+output: pdf_document
+---
+### Github Link: https://github.com/zazauwu/assignment3.git
+
+# Part 1 Data Science
+## Import Data
+```{r}
+#load the required package
+library(dplyr)
+
+#import my measurements.csv file from the Week 1 Assignment into an object called MData
+MData <- read.csv("measurements.csv")
+```
+
+```{r}
+#check the stucture of the dataset
+str(MData)
+```
+
+## Add Sp Column
+```{r}
+#use 'mutate' and 'regular expression' to add a new column called Sp that shortens the genus name in the Organism column to only the first letter and period.
+MData <- MData %>% 
+  mutate(Sp = gsub("([A-Z]).* (.*)", "\\1. \\2", Organism))
+```
+
+```{r}
+#visualize MData
+head(MData)
+```
+
+## Create a New Dataset
+```{r}
+#use 'select' to remove the Organism column and move it to the beginning
+NData <- MData %>% 
+  select(Sp, Limb.width, Limb.length, Observer)
+```
+
+## Visualize the Data
+```{r}
+head(NData)
+```
+
+## Save the New Data
+```{r}
+#name the dataset as MeasShort.csv
+write.csv(NData, "MeasShort.csv")
+```
