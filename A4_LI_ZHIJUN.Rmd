@@ -17,7 +17,7 @@ MData <- read.csv("measurements.csv")
 ```
 
 ```{r}
-#check the stucture of the dataset
+#check the structure of the data set
 str(MData)
 ```
 
@@ -35,7 +35,7 @@ head(MData)
 
 ## Create a New Dataset
 ```{r}
-#use 'select' to remove the Organism column and move it to the beginning
+#use 'select' to remove the Organism column and move Sp to the beginning
 NData <- MData %>% 
   select(Sp, Limb.width, Limb.length, Observer)
 ```
