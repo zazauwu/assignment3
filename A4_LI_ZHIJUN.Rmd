@@ -13,7 +13,7 @@ output: pdf_document
 library(dplyr)
 
 #import my measurements.csv file from the Week 1 Assignment into an object called MData
-MData <- read.csv("measurements.csv")
+MData <- read.csv("./InputData/measurements.csv")
 ```
 
 ```{r}
@@ -48,5 +48,5 @@ head(NData)
 ## Save the New Data
 ```{r}
 #name the dataset as MeasShort.csv
-write.csv(NData, "MeasShort.csv")
+write.csv(NData, "./Output/MeasShort.csv")
 ```
